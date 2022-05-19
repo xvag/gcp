@@ -7,9 +7,14 @@ terraform {
   }
 }
 
+variable "gcp_creds" {
+  type = string
+  sensitive = true
+  description = "Google Cloud service account credentials"
+}
 
 provider "google" {
-  credentials = file("active-defender-350709-3dfa8e7955a9.json")
+  credentials = var.gcp_creds
   project = "active-defender-350709"
 }
 
