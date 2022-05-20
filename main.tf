@@ -26,7 +26,7 @@ resource "google_compute_network" "vpc1" {
 
 resource "google_compute_subnetwork" "subnet1" {
   name          = "subnet1"
-  region         = "europe-west1"
+  region        = "europe-west1"
   ip_cidr_range = "10.1.0.0/24"
   network       = google_compute_network.vpc1.id
 }
@@ -38,7 +38,7 @@ resource "google_compute_network" "vpc2" {
 
 resource "google_compute_subnetwork" "subnet2" {
   name          = "subnet2"
-  region         = "europe-north1"
+  region        = "europe-north1"
   ip_cidr_range = "10.2.0.0/24"
   network       = google_compute_network.vpc2.id
 }
@@ -50,7 +50,7 @@ resource "google_compute_network" "vpc3" {
 
 resource "google_compute_subnetwork" "subnet3" {
   name          = "subnet3"
-  region         = "europe-west9"
+  region        = "europe-west9"
   ip_cidr_range = "10.3.0.0/24"
   network       = google_compute_network.vpc3.id
 }
