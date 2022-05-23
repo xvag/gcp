@@ -16,7 +16,7 @@ worker = (
     region  = "europe-central2"
     zone    = "europe-central2-a"
     subnet  = "10.2.0.0/16"
-    machine = "custom-4-8192"
+    machine = "custom-2-8192"
     image   = "debian-cloud/debian-9"
     size    = "20"
   }
