@@ -13,8 +13,8 @@ master = (
 
 worker = (
   {
-    region  = "europe-north1"
-    zone    = "europe-north1-b"
+    region  = "europe-central2"
+    zone    = "europe-central2-a"
     subnet  = "10.2.0.0/16"
     machine = "custom-4-8192"
     image   = "debian-cloud/debian-9"
@@ -24,8 +24,8 @@ worker = (
 
 control = (
   {
-    region  = "europe-west9"
-    zone    = "europe-west9-a"
+    region  = "europe-north1"
+    zone    = "europe-north1-c"
     subnet  = "10.3.0.0/16"
     machine = "custom-2-4096"
     image   = "centos-cloud/centos-7"
