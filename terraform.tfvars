@@ -1,6 +1,6 @@
 project = "active-defender-350709"
 
-master = [
+master = (
   {
     region  = "europe-west1"
     zone    = "europe-west1-b"
@@ -8,7 +8,7 @@ master = [
     machine = "e2-standard-2"
     image   = "debian-cloud/debian-9"
   }
-]
+)
 
 worker = [
   {
