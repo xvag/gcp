@@ -110,6 +110,7 @@ resource "google_compute_instance" "master-vm" {
   name         = "master-vm"
   machine_type = var.master.machine
   zone         = var.master.zone
+  allow_stopping_for_update = true
 
   boot_disk {
     initialize_params {
@@ -132,6 +133,7 @@ resource "google_compute_instance" "worker-vm" {
   name         = "worker-vm-${count.index}"
   machine_type = var.worker.machine
   zone         = var.worker.zone
+  allow_stopping_for_update = true
 
   boot_disk {
     initialize_params {
@@ -152,6 +154,7 @@ resource "google_compute_instance" "control-vm" {
   name         = "control-vm"
   machine_type = var.control.machine
   zone         = var.control.zone
+  allow_stopping_for_update = true
 
   boot_disk {
     initialize_params {
