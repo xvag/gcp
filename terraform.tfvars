@@ -28,7 +28,7 @@ control = (
     zone    = "europe-west9-a"
     subnet  = "10.3.0.0/16"
     machine = "custom-2-4096"
-    image   = "debian-cloud/debian-9"
+    image   = "centos-cloud/centos-7"
     size    = "20"
   }
 )
