@@ -1,9 +1,9 @@
 variable "project" {
-  default = "active-defender-350709"
+  type = string
 }
 
 variable "gcp_creds" {
-  type = string
-  sensitive = true
+  type        = string
+  sensitive   = true
   description = "Google Cloud service account credentials"
 }
