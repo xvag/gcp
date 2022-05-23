@@ -7,3 +7,33 @@ variable "gcp_creds" {
   sensitive   = true
   description = "Google Cloud service account credentials"
 }
+
+variable "master" {
+  type = object ({
+    region = string
+    zone = string
+    subnet = string
+    machine = string
+    image = string
+  })
+}
+
+variable "worker" {
+  type = object ({
+    region = string
+    zone = string
+    subnet = string
+    machine = string
+    image = string
+  })
+}
+
+variable "control" {
+  type = object ({
+    region = string
+    zone = string
+    subnet = string
+    machine = string
+    image = string
+  })
+}

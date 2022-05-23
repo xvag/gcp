@@ -12,81 +12,57 @@ provider "google" {
   project = var.project
 }
 
-resource "google_compute_network" "vpc1" {
-  name = "vpc1"
+resource "google_compute_network" "master-vpc" {
+  name = "master-vpc"
   auto_create_subnetworks = "false"
 }
 
-resource "google_compute_subnetwork" "subnet1" {
-  name          = "subnet1"
-  region        = "europe-west1"
-  ip_cidr_range = "10.1.0.0/24"
-  network       = google_compute_network.vpc1.id
+resource "google_compute_subnetwork" "master-subnet" {
+  name          = "master-subnet"
+  region        = var.master.region
+  ip_cidr_range = var.master.subnet
+  network       = google_compute_network.master-vpc.id
 }
 
-resource "google_compute_network" "vpc2" {
-  name = "vpc2"
+resource "google_compute_network" "worker-vpc" {
+  name = "worker-vpc"
   auto_create_subnetworks = "false"
 }
 
-resource "google_compute_subnetwork" "subnet2" {
-  name          = "subnet2"
-  region        = "europe-north1"
-  ip_cidr_range = "10.2.0.0/24"
-  network       = google_compute_network.vpc2.id
+resource "google_compute_subnetwork" "worker-subnet" {
+  name          = "worker-subnet"
+  region        = var.worker.region
+  ip_cidr_range = var.worker.subnet
+  network       = google_compute_network.worker-vpc.id
 }
 
-resource "google_compute_network" "vpc3" {
-  name = "vpc3"
+resource "google_compute_network" "control-vpc" {
+  name = "control-vpc"
   auto_create_subnetworks = "false"
 }
 
-resource "google_compute_subnetwork" "subnet3" {
-  name          = "subnet3"
-  region        = "europe-west9"
-  ip_cidr_range = "10.3.0.0/24"
-  network       = google_compute_network.vpc3.id
+resource "google_compute_subnetwork" "control-subnet" {
+  name          = "control-subnet"
+  region        = var.control.region
+  ip_cidr_range = var.control.subnet
+  network       = google_compute_network.control-vpc.id
 }
 
-resource "google_compute_network_peering" "p12" {
-  name         = "p12"
-  network      = google_compute_network.vpc1.self_link
-  peer_network = google_compute_network.vpc2.self_link
+resource "google_compute_network_peering" "master-worker" {
+  name         = "master-worker"
+  network      = google_compute_network.master-vpc.self_link
+  peer_network = google_compute_network.worker-vpc.self_link
 }
 
-resource "google_compute_network_peering" "p13" {
-  name         = "p13"
-  network      = google_compute_network.vpc1.self_link
-  peer_network = google_compute_network.vpc3.self_link
+resource "google_compute_network_peering" "worker-master" {
+  name         = "worker-master"
+  network      = google_compute_network.worker-vpc.self_link
+  peer_network = google_compute_network.master-vpc.self_link
 }
 
-resource "google_compute_network_peering" "p21" {
-  name         = "p21"
-  network      = google_compute_network.vpc2.self_link
-  peer_network = google_compute_network.vpc1.self_link
-}
-
-resource "google_compute_network_peering" "p23" {
-  name         = "p23"
-  network      = google_compute_network.vpc2.self_link
-  peer_network = google_compute_network.vpc3.self_link
-}
-
-resource "google_compute_network_peering" "p31" {
-  name         = "p31"
-  network      = google_compute_network.vpc3.self_link
-  peer_network = google_compute_network.vpc1.self_link
-}
-
-resource "google_compute_network_peering" "p32" {
-  name         = "p32"
-  network      = google_compute_network.vpc3.self_link
-  peer_network = google_compute_network.vpc2.self_link
-}
-
-resource "google_compute_firewall" "fw1" {
-  name    = "fw1"
-  network = google_compute_network.vpc1.name
+resource "google_compute_firewall" "master-fw" {
+  name    = "master-fw"
+  network = google_compute_network.master-vpc.name
   allow {
     protocol = "icmp"
   }
@@ -99,9 +75,9 @@ resource "google_compute_firewall" "fw1" {
   ]
 }
 
-resource "google_compute_firewall" "fw2" {
-  name    = "fw2"
-  network = google_compute_network.vpc2.name
+resource "google_compute_firewall" "worker-fw" {
+  name    = "worker-fw"
+  network = google_compute_network.worker-vpc.name
   allow {
     protocol = "icmp"
   }
@@ -114,9 +90,9 @@ resource "google_compute_firewall" "fw2" {
   ]
 }
 
-resource "google_compute_firewall" "fw3" {
-  name    = "fw3"
-  network = google_compute_network.vpc3.name
+resource "google_compute_firewall" "control-fw" {
+  name    = "control-fw"
+  network = google_compute_network.control-vpc.name
   allow {
     protocol = "icmp"
   }
@@ -130,58 +106,60 @@ resource "google_compute_firewall" "fw3" {
 }
 
 
-resource "google_compute_instance" "vm1" {
-  name         = "vm1"
-  machine_type = "e2-standard-2"
-  zone         = "europe-west1-b"
+resource "google_compute_instance" "master-vm" {
+  name         = "master-vm"
+  machine_type = var.master.machine
+  zone         = var.master.zone
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-9"
+      image = var.master.image
     }
   }
 
   network_interface {
-    network = google_compute_network.vpc1.name
-    subnetwork = google_compute_subnetwork.subnet1.name
+    network = google_compute_network.master-vpc.name
+    subnetwork = google_compute_subnetwork.master-subnet.name
     access_config {
     }
   }
 }
 
-resource "google_compute_instance" "vm2" {
-  name         = "vm2"
-  machine_type = "e2-standard-2"
-  zone         = "europe-north1-b"
+resource "google_compute_instance" "worker-vm" {
+  count = 2
+
+  name         = "worker-vm-${count.index}"
+  machine_type = var.worker.machine
+  zone         = var.worker.zone
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-9"
+      image = var.worker.image
     }
   }
 
   network_interface {
-    network = google_compute_network.vpc2.name
-    subnetwork = google_compute_subnetwork.subnet2.name
+    network = google_compute_network.worker-vpc.name
+    subnetwork = google_compute_subnetwork.worker-subnet.name
     access_config {
     }
   }
 }
 
-resource "google_compute_instance" "vm3" {
-  name         = "vm3"
-  machine_type = "e2-standard-2"
-  zone         = "europe-west9-a"
+resource "google_compute_instance" "control-vm" {
+  name         = "control-vm"
+  machine_type = var.control.machine
+  zone         = var.control.zone
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-9"
+      image = var.control.image
     }
   }
 
   network_interface {
-    network = google_compute_network.vpc3.name
-    subnetwork = google_compute_subnetwork.subnet3.name
+    network = google_compute_network.control-vpc.name
+    subnetwork = google_compute_subnetwork.control-subnet.name
     access_config {
     }
   }
