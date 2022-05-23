@@ -12,7 +12,6 @@ provider "google" {
   project = var.project
 }
 
-
 resource "google_compute_network" "vpc1" {
   name = "vpc1"
   auto_create_subnetworks = "false"
@@ -84,7 +83,6 @@ resource "google_compute_network_peering" "p32" {
   network      = google_compute_network.vpc3.self_link
   peer_network = google_compute_network.vpc2.self_link
 }
-
 
 resource "google_compute_firewall" "fw1" {
   name    = "fw1"
