@@ -10,7 +10,7 @@ master = (
   }
 )
 
-worker = [
+worker = (
   {
     region  = "europe-north1"
     zone    = "europe-north1-b"
@@ -18,9 +18,9 @@ worker = [
     machine = "e2-standard-2"
     image   = "debian-cloud/debian-9"
   }
-]
+)
 
-control = [
+control = (
   {
     region  = "europe-west9"
     zone    = "europe-west9-a"
@@ -28,4 +28,4 @@ control = [
     machine = "e2-standard-2"
     image   = "debian-cloud/debian-9"
   }
-]
+)
