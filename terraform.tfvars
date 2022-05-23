@@ -7,6 +7,7 @@ master = (
     subnet  = "10.1.0.0/16"
     machine = "custom-4-8192"
     image   = "debian-cloud/debian-9"
+    size    = "20"
   }
 )
 
@@ -17,6 +18,7 @@ worker = (
     subnet  = "10.2.0.0/16"
     machine = "custom-4-8192"
     image   = "debian-cloud/debian-9"
+    size    = "20"
   }
 )
 
@@ -27,5 +29,6 @@ control = (
     subnet  = "10.3.0.0/16"
     machine = "custom-2-4096"
     image   = "debian-cloud/debian-9"
+    size    = "20"
   }
 )

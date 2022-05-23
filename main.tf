@@ -114,6 +114,7 @@ resource "google_compute_instance" "master-vm" {
   boot_disk {
     initialize_params {
       image = var.master.image
+      size  = var.master.size
     }
   }
 
@@ -135,6 +136,7 @@ resource "google_compute_instance" "worker-vm" {
   boot_disk {
     initialize_params {
       image = var.worker.image
+      size  = var.worker.size
     }
   }
 
@@ -154,6 +156,7 @@ resource "google_compute_instance" "control-vm" {
   boot_disk {
     initialize_params {
       image = var.control.image
+      size  = var.control.size
     }
   }
 

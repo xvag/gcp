@@ -10,30 +10,33 @@ variable "gcp_creds" {
 
 variable "master" {
   type = object ({
-    region = string
-    zone = string
-    subnet = string
+    region  = string
+    zone    = string
+    subnet  = string
     machine = string
-    image = string
+    image   = string
+    size    = string
   })
 }
 
 variable "worker" {
   type = object ({
-    region = string
-    zone = string
-    subnet = string
+    region  = string
+    zone    = string
+    subnet  = string
     machine = string
-    image = string
+    image   = string
+    size    = string
   })
 }
 
 variable "control" {
   type = object ({
-    region = string
-    zone = string
-    subnet = string
+    region  = string
+    zone    = string
+    subnet  = string
     machine = string
-    image = string
+    image   = string
+    size    = string
   })
 }
