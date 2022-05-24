@@ -28,7 +28,7 @@ resource "google_compute_subnetwork" "subnet" {
 
 resource "google_compute_firewall" "master-fw" {
   name    = "master-fw"
-  network = google_compute_network.${var.vpc.master.key}.name
+  network = google_compute_network.[var.vpc.master.key].name
   allow {
     protocol = "icmp"
   }

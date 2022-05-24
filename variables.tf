@@ -9,7 +9,7 @@ variable "gcp_creds" {
 }
 
 variable "vpc" {
-  type        = map(object({
+  type      = map(object({
     name    = string
     region  = string
     zone    = string
