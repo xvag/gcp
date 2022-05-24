@@ -18,13 +18,6 @@ resource "google_compute_network" "vpc" {
   auto_create_subnetworks = "false"
 }
 
-resource "google_compute_subnetwork" "subnet" {
-  for_each      = toset(var.vpc)
-  name          = "${each.value}-subnet"
-  region        = var.${each.value}.region
-  ip_cidr_range = var.[each.value].subnet
-  network       = google_compute_network.[each.value]-vpc.id
-}
 
 resource "google_compute_firewall" "master-fw" {
   name    = "master-fw"
