@@ -60,7 +60,7 @@ resource "google_compute_network_peering" "peer" {
     control = "worker"
   }
   name         = "${each.key}-to-${each.value}"
-  network      = google_compute_network."${each.key}-vpc".self_link
+  network      = google_compute_network.[each.key]-vpc.self_link
   peer_network = google_compute_network."${each.value}-vpc".self_link
 }
 
