@@ -28,7 +28,7 @@ resource "google_compute_subnetwork" "subnet" {
 
 resource "google_compute_firewall" "master-fw" {
   name    = "master-fw"
-  network = google_compute_network.var.vpc.master.key.name
+  network = google_compute_network.${var.vpc.master.key}.name
   allow {
     protocol = "icmp"
   }
@@ -43,7 +43,7 @@ resource "google_compute_firewall" "master-fw" {
 
 resource "google_compute_firewall" "worker-fw" {
   name    = "worker-fw"
-  network = google_compute_network.var.vpc.worker.value.name.name
+  network = google_compute_network.${var.vpc.worker.value.name}.name
   allow {
     protocol = "icmp"
   }
@@ -58,7 +58,7 @@ resource "google_compute_firewall" "worker-fw" {
 
 resource "google_compute_firewall" "control-fw" {
   name    = "control-fw"
-  network = google_compute_network.var.vpc.control.key.name
+  network = google_compute_network.${var.vpc.control.key}.name
   allow {
     protocol = "icmp"
   }
@@ -85,8 +85,8 @@ resource "google_compute_instance" "master-vm" {
   }
 
   network_interface {
-    network    = google_compute_network.var.vpc.master.name.name
-    subnetwork = google_compute_subnetwork.var.vpc.master.name.name
+    network    = google_compute_network.${var.vpc.master.name}.name
+    subnetwork = google_compute_subnetwork.${var.vpc.master.name}.name
     network_ip = var.vpc.master.ip
     access_config {
     }
@@ -109,8 +109,8 @@ resource "google_compute_instance" "worker-vm" {
   }
 
   network_interface {
-    network    = google_compute_network.var.vpc.worker.name.name
-    subnetwork = google_compute_subnetwork.var.vpc.worker.name.name
+    network    = google_compute_network.${var.vpc.worker.name}.name
+    subnetwork = google_compute_subnetwork.${var.vpc.worker.name}.name
     network_ip = var.vpc.worker.ip[count.index]
     access_config {
     }
@@ -131,8 +131,8 @@ resource "google_compute_instance" "control-vm" {
   }
 
   network_interface {
-    network    = google_compute_network.var.vpc.control.name.name
-    subnetwork = google_compute_subnetwork.var.vpc.control.name.name
+    network    = google_compute_network.${var.vpc.control.name}.name
+    subnetwork = google_compute_subnetwork.${var.vpc.control.name}.name
     network_ip = var.vpc.control.ip
     access_config {
     }
