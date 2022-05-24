@@ -9,23 +9,8 @@ variable "gcp_creds" {
 }
 
 variable "vpc" {
-  type = set(string)
-}
-
-variable "master" {
-  type = object ({
-    region  = string
-    zone    = string
-    subnet  = string
-    machine = string
-    image   = string
-    size    = string
-    ip      = string
-  })
-}
-
-variable "worker" {
-  type = object ({
+  type        = map(object({
+    name    = string
     region  = string
     zone    = string
     subnet  = string
@@ -33,17 +18,5 @@ variable "worker" {
     image   = string
     size    = string
     ip      = list(string)
-  })
-}
-
-variable "control" {
-  type = object ({
-    region  = string
-    zone    = string
-    subnet  = string
-    machine = string
-    image   = string
-    size    = string
-    ip      = string
-  })
+  }))
 }
