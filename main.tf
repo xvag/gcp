@@ -42,6 +42,20 @@ resource "google_compute_firewall" "fw" {
   ]
 }
 
+resource "google_compute_network_peering" "peer" {
+  for_each  = {
+    master  = "worker"
+    master  = "control"
+    worker  = "master"
+    worker  = "control"
+    control = "master"
+    control = "worker"
+  }
+  name         = "${each.key}-to-${each.value}"
+  network      = "${each.key}-vpc"
+  peer_network = "${each.value}-vpc"
+}
+
 resource "google_compute_instance" "master-vm" {
   name         = "${var.vpc.master.name}-vm"
   machine_type = var.vpc.master.machine
