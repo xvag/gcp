@@ -26,39 +26,10 @@ resource "google_compute_subnetwork" "subnet" {
   network       = google_compute_network."${each.key}".id
 }
 
-resource "google_compute_firewall" "master-fw" {
-  name    = "master-fw"
-  network = google_compute_network."${var.vpc.master.key}".name
-  allow {
-    protocol = "icmp"
-  }
-  allow {
-    protocol = "tcp"
-    ports    = ["0-65535"]
-  }
-  source_ranges = [
-    "0.0.0.0/0"
-  ]
-}
-
-resource "google_compute_firewall" "worker-fw" {
-  name    = "worker-fw"
-  network = google_compute_network.[var.vpc.worker.value.name].name
-  allow {
-    protocol = "icmp"
-  }
-  allow {
-    protocol = "tcp"
-    ports    = ["0-65535"]
-  }
-  source_ranges = [
-    "0.0.0.0/0"
-  ]
-}
-
-resource "google_compute_firewall" "control-fw" {
-  name    = "control-fw"
-  network = google_compute_network.[var.vpc.control.key].name
+resource "google_compute_firewall" "fw" {
+  for_each = var.vpc
+  name     = each.value.name
+  network = google_compute_network.[each.value.name].name
   allow {
     protocol = "icmp"
   }
