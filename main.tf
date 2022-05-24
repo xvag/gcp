@@ -23,12 +23,12 @@ resource "google_compute_subnetwork" "subnet" {
   name          = each.value.name
   region        = each.value.region
   ip_cidr_range = each.value.subnet
-  network       = google_compute_network.[each.key].id
+  network       = google_compute_network."${each.key}".id
 }
 
 resource "google_compute_firewall" "master-fw" {
   name    = "master-fw"
-  network = google_compute_network.[var.vpc.master.key].name
+  network = google_compute_network."${var.vpc.master.key}".name
   allow {
     protocol = "icmp"
   }
