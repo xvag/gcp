@@ -44,21 +44,21 @@ resource "google_compute_firewall" "fw" {
 
 resource "google_compute_instance" "master-vm" {
   name         = "master-vm"
-  machine_type = var.vpc[master.value.machine]
-  zone         = var.vpc.master.value.zone
+  machine_type = var.vpc.master.machine
+  zone         = var.vpc.master.zone
   allow_stopping_for_update = true
 
   boot_disk {
     initialize_params {
-      image = var.vpc.master.value.image
-      size  = var.vpc.master.value.size
+      image = var.vpc.master.image
+      size  = var.vpc.master.size
     }
   }
 
   network_interface {
-    network    = "${var.vpc.master.value.name}-vpc"
-    subnetwork = "${var.vpc.master.value.name}-subnet"
-    network_ip = var.vpc.master.value.ip
+    network    = "${var.vpc.master.name}-vpc"
+    subnetwork = "${var.vpc.master.name}-subnet"
+    network_ip = var.vpc.master.ip
     access_config {
     }
   }
@@ -68,21 +68,21 @@ resource "google_compute_instance" "worker-vm" {
   count = 2
 
   name         = "worker-vm-${count.index}"
-  machine_type = var.vpc.worker.value.machine
-  zone         = var.vpc.worker.value.zone
+  machine_type = var.vpc.worker.machine
+  zone         = var.vpc.worker.zone
   allow_stopping_for_update = true
 
   boot_disk {
     initialize_params {
-      image = var.vpc.worker.value.image
-      size  = var.vpc.worker.value.size
+      image = var.vpc.worker.image
+      size  = var.vpc.worker.size
     }
   }
 
   network_interface {
-    network    = "${var.vpc.worker.value.name}-vpc"
-    subnetwork = "${var.vpc.worker.value.name}-subnet"
-    network_ip = var.vpc.worker.value.ip[count.index]
+    network    = "${var.vpc.worker.name}-vpc"
+    subnetwork = "${var.vpc.worker.name}-subnet"
+    network_ip = var.vpc.worker.ip[count.index]
     access_config {
     }
   }
@@ -90,21 +90,21 @@ resource "google_compute_instance" "worker-vm" {
 
 resource "google_compute_instance" "control-vm" {
   name         = "control-vm"
-  machine_type = var.vpc.control.value.machine
-  zone         = var.vpc.control.value.zone
+  machine_type = var.vpc.control.machine
+  zone         = var.vpc.control.zone
   allow_stopping_for_update = true
 
   boot_disk {
     initialize_params {
-      image = var.vpc.control.value.image
-      size  = var.vpc.control.value.size
+      image = var.vpc.control.image
+      size  = var.vpc.control.size
     }
   }
 
   network_interface {
-    network    = "${var.vpc.control.value.name}-vpc"
-    subnetwork = "${var.vpc.control.value.name}-subnet"
-    network_ip = var.vpc.control.value.ip
+    network    = "${var.vpc.control.name}-vpc"
+    subnetwork = "${var.vpc.control.name}-subnet"
+    network_ip = var.vpc.control.ip
     access_config {
     }
   }
