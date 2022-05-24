@@ -20,6 +20,7 @@ worker = (
     machine = "custom-2-8192"
     image   = "debian-cloud/debian-9"
     size    = "20"
+    ip      = ["10.2.0.11","10.2.0.12"]
   }
 )
 

@@ -28,6 +28,7 @@ variable "worker" {
     machine = string
     image   = string
     size    = string
+    ip      = list(string)
   })
 }
 
