@@ -42,18 +42,40 @@ resource "google_compute_firewall" "fw" {
   ]
 }
 
-resource "google_compute_network_peering" "peer" {
-  for_each  = {
-    master  = "worker"
-    master  = "control"
-    worker  = "master"
-    worker  = "control"
-    control = "master"
-    control = "worker"
-  }
-  name         = "${each.key}-to-${each.value}"
-  network      = "${each.key}-vpc"
-  peer_network = "${each.value}-vpc"
+resource "google_compute_network_peering" "master-worker" {
+  name         = "master-worker"
+  network      = google_compute_network.master-vpc.self_link
+  peer_network = google_compute_network.worker-vpc.self_link
+}
+
+resource "google_compute_network_peering" "worker-master" {
+  name         = "worker-master"
+  network      = google_compute_network.worker-vpc.self_link
+  peer_network = google_compute_network.master-vpc.self_link
+}
+
+resource "google_compute_network_peering" "control-master" {
+  name         = "control-master"
+  network      = google_compute_network.control-vpc.self_link
+  peer_network = google_compute_network.master-vpc.self_link
+}
+
+resource "google_compute_network_peering" "master-control" {
+  name         = "master-control"
+  network      = google_compute_network.master-vpc.self_link
+  peer_network = google_compute_network.control-vpc.self_link
+}
+
+resource "google_compute_network_peering" "control-worker" {
+  name         = "control-worker"
+  network      = google_compute_network.control-vpc.self_link
+  peer_network = google_compute_network.worker-vpc.self_link
+}
+
+resource "google_compute_network_peering" "worker-control" {
+  name         = "worker-control"
+  network      = google_compute_network.worker-vpc.self_link
+  peer_network = google_compute_network.control-vpc.self_link
 }
 
 resource "google_compute_instance" "master-vm" {
