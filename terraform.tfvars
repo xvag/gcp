@@ -8,6 +8,7 @@ master = (
     machine = "custom-4-8192"
     image   = "debian-cloud/debian-9"
     size    = "20"
+    ip      = "10.1.0.10/16"
   }
 )
 
@@ -30,5 +31,6 @@ control = (
     machine = "custom-2-4096"
     image   = "centos-cloud/centos-7"
     size    = "20"
+    ip      = "10.3.0.10/16"
   }
 )

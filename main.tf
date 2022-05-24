@@ -122,6 +122,7 @@ resource "google_compute_instance" "master-vm" {
   network_interface {
     network = google_compute_network.master-vpc.name
     subnetwork = google_compute_subnetwork.master-subnet.name
+    network_ip = var.master.ip
     access_config {
     }
   }
@@ -166,6 +167,7 @@ resource "google_compute_instance" "control-vm" {
   network_interface {
     network = google_compute_network.control-vpc.name
     subnetwork = google_compute_subnetwork.control-subnet.name
+    network_ip = var.control.ip
     access_config {
     }
   }

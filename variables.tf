@@ -16,6 +16,7 @@ variable "master" {
     machine = string
     image   = string
     size    = string
+    ip      = string
   })
 }
 
@@ -38,5 +39,6 @@ variable "control" {
     machine = string
     image   = string
     size    = string
+    ip      = string
   })
 }
