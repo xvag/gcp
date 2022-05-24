@@ -43,7 +43,7 @@ resource "google_compute_firewall" "master-fw" {
 
 resource "google_compute_firewall" "worker-fw" {
   name    = "worker-fw"
-  network = google_compute_network.[var.vpc.worker.value.name].name
+  network = google_compute_network.var.vpc.worker.value.name.name
   allow {
     protocol = "icmp"
   }
