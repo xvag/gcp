@@ -12,6 +12,22 @@ provider "google" {
   project     = var.project
 }
 
+variable "typed_nested_map_values_different_types" {
+  default = {
+    key_1 = "value_1"
+    key_2 = {
+      nested_key_1 = "value_2"
+    }
+  }
+  type = object({
+    key_1 = string,
+    key_2 = map(string)
+  })
+}
+output "typed_nested_map_values_different_types" {
+  value = var.typed_nested_map_values_different_types.key_2.nested_key_1
+}
+
 resource "google_compute_network" "vpc" {
   for_each = var.vpc
   name     = each.value.name
