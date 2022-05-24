@@ -58,7 +58,7 @@ resource "google_compute_instance" "master-vm" {
   network_interface {
     network    = "${var.vpc.master.name}-vpc"
     subnetwork = "${var.vpc.master.name}-subnet"
-    network_ip = var.vpc.master.ip
+    network_ip = var.vpc.master.ip[0]
     access_config {
     }
   }
@@ -104,7 +104,7 @@ resource "google_compute_instance" "control-vm" {
   network_interface {
     network    = "${var.vpc.control.name}-vpc"
     subnetwork = "${var.vpc.control.name}-subnet"
-    network_ip = var.vpc.control.ip
+    network_ip = var.vpc.control.ip[0]
     access_config {
     }
   }
