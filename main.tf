@@ -9,55 +9,21 @@ terraform {
 
 provider "google" {
   credentials = var.gcp_creds
-  project = var.project
+  project     = var.project
 }
 
-resource "google_compute_network" "master-vpc" {
-  name = "master-vpc"
+resource "google_compute_network" "vpc" {
+  for_each = toset(var.vpc)
+  name     = "${each.value}-vpc"
   auto_create_subnetworks = "false"
 }
 
-resource "google_compute_subnetwork" "master-subnet" {
-  name          = "master-subnet"
-  region        = var.master.region
-  ip_cidr_range = var.master.subnet
-  network       = google_compute_network.master-vpc.id
-}
-
-resource "google_compute_network" "worker-vpc" {
-  name = "worker-vpc"
-  auto_create_subnetworks = "false"
-}
-
-resource "google_compute_subnetwork" "worker-subnet" {
-  name          = "worker-subnet"
-  region        = var.worker.region
-  ip_cidr_range = var.worker.subnet
-  network       = google_compute_network.worker-vpc.id
-}
-
-resource "google_compute_network" "control-vpc" {
-  name = "control-vpc"
-  auto_create_subnetworks = "false"
-}
-
-resource "google_compute_subnetwork" "control-subnet" {
-  name          = "control-subnet"
-  region        = var.control.region
-  ip_cidr_range = var.control.subnet
-  network       = google_compute_network.control-vpc.id
-}
-
-resource "google_compute_network_peering" "master-worker" {
-  name         = "master-worker"
-  network      = google_compute_network.master-vpc.self_link
-  peer_network = google_compute_network.worker-vpc.self_link
-}
-
-resource "google_compute_network_peering" "worker-master" {
-  name         = "worker-master"
-  network      = google_compute_network.worker-vpc.self_link
-  peer_network = google_compute_network.master-vpc.self_link
+resource "google_compute_subnetwork" "subnet" {
+  for_each      = toset(var.vpc)
+  name          = "${each.value}-subnet"
+  region        = var.${each.value}.region
+  ip_cidr_range = var.${each.value}.subnet
+  network       = google_compute_network.${each.value}-vpc.id
 }
 
 resource "google_compute_firewall" "master-fw" {

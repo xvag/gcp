@@ -1,5 +1,7 @@
 project = "active-defender-350709"
 
+vpc = ["master","worker","control"]
+
 master = (
   {
     region  = "europe-west1"

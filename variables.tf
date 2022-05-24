@@ -8,6 +8,10 @@ variable "gcp_creds" {
   description = "Google Cloud service account credentials"
 }
 
+variable "vpc" {
+  type = set(string)
+}
+
 variable "master" {
   type = object ({
     region  = string
