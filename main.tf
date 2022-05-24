@@ -43,7 +43,7 @@ resource "google_compute_firewall" "fw" {
 }
 
 resource "google_compute_instance" "master-vm" {
-  name         = "master-vm"
+  name         = "${var.vpc.master.name}-vm"
   machine_type = var.vpc.master.machine
   zone         = var.vpc.master.zone
   allow_stopping_for_update = true
@@ -67,7 +67,7 @@ resource "google_compute_instance" "master-vm" {
 resource "google_compute_instance" "worker-vm" {
   count = 2
 
-  name         = "worker-vm-${count.index}"
+  name         = "${var.vpc.worker.name}-vm-${count.index}"
   machine_type = var.vpc.worker.machine
   zone         = var.vpc.worker.zone
   allow_stopping_for_update = true
@@ -89,7 +89,7 @@ resource "google_compute_instance" "worker-vm" {
 }
 
 resource "google_compute_instance" "control-vm" {
-  name         = "control-vm"
+  name         = "${var.vpc.control.name}-vm"
   machine_type = var.vpc.control.machine
   zone         = var.vpc.control.zone
   allow_stopping_for_update = true
