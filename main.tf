@@ -23,7 +23,7 @@ resource "google_compute_subnetwork" "subnet" {
   name          = each.value.name
   region        = each.value.region
   ip_cidr_range = each.value.subnet
-  network       = google_compute_network.each.key.id
+  network       = google_compute_network.[each.key].id
 }
 
 resource "google_compute_firewall" "master-fw" {
@@ -43,7 +43,7 @@ resource "google_compute_firewall" "master-fw" {
 
 resource "google_compute_firewall" "worker-fw" {
   name    = "worker-fw"
-  network = google_compute_network.${var.vpc.worker.value.name}.name
+  network = google_compute_network.[var.vpc.worker.value.name].name
   allow {
     protocol = "icmp"
   }
@@ -58,7 +58,7 @@ resource "google_compute_firewall" "worker-fw" {
 
 resource "google_compute_firewall" "control-fw" {
   name    = "control-fw"
-  network = google_compute_network.${var.vpc.control.key}.name
+  network = google_compute_network.[var.vpc.control.key].name
   allow {
     protocol = "icmp"
   }
@@ -79,15 +79,15 @@ resource "google_compute_instance" "master-vm" {
 
   boot_disk {
     initialize_params {
-      image = var.vpc.master.image
-      size  = var.vpc.master.size
+      image = var.vpc.master.value.image
+      size  = var.vpc.master.value.size
     }
   }
 
   network_interface {
-    network    = google_compute_network.${var.vpc.master.name}.name
-    subnetwork = google_compute_subnetwork.${var.vpc.master.name}.name
-    network_ip = var.vpc.master.ip
+    network    = google_compute_network.[var.vpc.master.value.name].name
+    subnetwork = google_compute_subnetwork.[var.vpc.master.value.name].name
+    network_ip = var.vpc.master.value.ip
     access_config {
     }
   }
@@ -97,21 +97,21 @@ resource "google_compute_instance" "worker-vm" {
   count = 2
 
   name         = "worker-vm-${count.index}"
-  machine_type = var.vpc.worker.machine
-  zone         = var.vpc.worker.zone
+  machine_type = var.vpc.worker.value.machine
+  zone         = var.vpc.worker.value.zone
   allow_stopping_for_update = true
 
   boot_disk {
     initialize_params {
-      image = var.vpc.worker.image
-      size  = var.vpc.worker.size
+      image = var.vpc.worker.value.image
+      size  = var.vpc.worker.value.size
     }
   }
 
   network_interface {
-    network    = google_compute_network.${var.vpc.worker.name}.name
-    subnetwork = google_compute_subnetwork.${var.vpc.worker.name}.name
-    network_ip = var.vpc.worker.ip[count.index]
+    network    = google_compute_network.[var.vpc.worker.value.name].name
+    subnetwork = google_compute_subnetwork.[var.vpc.worker.value.name].name
+    network_ip = var.vpc.worker.value.ip[count.index]
     access_config {
     }
   }
@@ -119,21 +119,21 @@ resource "google_compute_instance" "worker-vm" {
 
 resource "google_compute_instance" "control-vm" {
   name         = "control-vm"
-  machine_type = var.vpc.control.machine
-  zone         = var.vpc.control.zone
+  machine_type = var.vpc.control.value.machine
+  zone         = var.vpc.control.value.zone
   allow_stopping_for_update = true
 
   boot_disk {
     initialize_params {
-      image = var.vpc.control.image
-      size  = var.vpc.control.size
+      image = var.vpc.control.value.image
+      size  = var.vpc.control.value.size
     }
   }
 
   network_interface {
-    network    = google_compute_network.${var.vpc.control.name}.name
-    subnetwork = google_compute_subnetwork.${var.vpc.control.name}.name
-    network_ip = var.vpc.control.ip
+    network    = google_compute_network.[var.vpc.control.value.name].name
+    subnetwork = google_compute_subnetwork.[var.vpc.control.value.name].name
+    network_ip = var.vpc.control.value.ip
     access_config {
     }
   }
