@@ -12,40 +12,24 @@ provider "google" {
   project     = var.project
 }
 
-variable "typed_nested_map_values_different_types" {
-  default = {
-    key_1 = "value_1"
-    key_2 = {
-      nested_key_1 = "value_2"
-    }
-  }
-  type = object({
-    key_1 = string,
-    key_2 = map(string)
-  })
-}
-output "typed_nested_map_values_different_types" {
-  value = var.typed_nested_map_values_different_types.key_2.nested_key_1
-}
-
 resource "google_compute_network" "vpc" {
   for_each = var.vpc
-  name     = each.value.name
+  name     = "${each.value.name}-vpc"
   auto_create_subnetworks = "false"
 }
 
 resource "google_compute_subnetwork" "subnet" {
   for_each      = var.vpc
-  name          = each.value.name
+  name          = "${each.value.name}-subnet"
   region        = each.value.region
   ip_cidr_range = each.value.subnet
-  network       = google_compute_network."${each.key}".id
+  network       = "${each.value.name}-vpc"
 }
 
 resource "google_compute_firewall" "fw" {
   for_each = var.vpc
-  name     = each.value.name
-  network = google_compute_network.[each.value.name].name
+  name     = "${each.value.name}-fw"
+  network  = "${each.value.name}-vpc"
   allow {
     protocol = "icmp"
   }
@@ -60,7 +44,7 @@ resource "google_compute_firewall" "fw" {
 
 resource "google_compute_instance" "master-vm" {
   name         = "master-vm"
-  machine_type = var.vpc.master.value.machine
+  machine_type = var.vpc[master.value.machine]
   zone         = var.vpc.master.value.zone
   allow_stopping_for_update = true
 
