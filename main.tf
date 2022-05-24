@@ -12,11 +12,15 @@ provider "google" {
   project     = var.project
 }
 
+### Create the VPC networks
+
 resource "google_compute_network" "vpc" {
   for_each = var.vpc
   name     = "${each.value.name}-vpc"
   auto_create_subnetworks = "false"
 }
+
+### Create the subnetworks
 
 resource "google_compute_subnetwork" "subnet" {
   for_each      = var.vpc
@@ -25,6 +29,8 @@ resource "google_compute_subnetwork" "subnet" {
   ip_cidr_range = each.value.subnet
   network       = "${each.value.name}-vpc"
 }
+
+### Create the firewall rules
 
 resource "google_compute_firewall" "fw" {
   for_each = var.vpc
@@ -42,41 +48,23 @@ resource "google_compute_firewall" "fw" {
   ]
 }
 
-resource "google_compute_network_peering" "master-worker" {
-  name         = "master-worker"
-  network      = google_compute_network.master-vpc.self_link
-  peer_network = google_compute_network.worker-vpc.self_link
+### Create the VPC peerings
+
+resource "google_compute_network_peering" "peer" {
+  for_each  = {
+    master  = "worker"
+    master  = "control"
+    worker  = "master"
+    worker  = "control"
+    control = "master"
+    control = "worker"
+  }
+  name         = "${each.key}-to-${each.value}"
+  network      = google_compute_network."${each.key}-vpc".self_link
+  peer_network = google_compute_network."${each.value}-vpc".self_link
 }
 
-resource "google_compute_network_peering" "worker-master" {
-  name         = "worker-master"
-  network      = google_compute_network.worker-vpc.self_link
-  peer_network = google_compute_network.master-vpc.self_link
-}
-
-resource "google_compute_network_peering" "control-master" {
-  name         = "control-master"
-  network      = google_compute_network.control-vpc.self_link
-  peer_network = google_compute_network.master-vpc.self_link
-}
-
-resource "google_compute_network_peering" "master-control" {
-  name         = "master-control"
-  network      = google_compute_network.master-vpc.self_link
-  peer_network = google_compute_network.control-vpc.self_link
-}
-
-resource "google_compute_network_peering" "control-worker" {
-  name         = "control-worker"
-  network      = google_compute_network.control-vpc.self_link
-  peer_network = google_compute_network.worker-vpc.self_link
-}
-
-resource "google_compute_network_peering" "worker-control" {
-  name         = "worker-control"
-  network      = google_compute_network.worker-vpc.self_link
-  peer_network = google_compute_network.control-vpc.self_link
-}
+### Create the VMs
 
 resource "google_compute_instance" "master-vm" {
   name         = "${var.vpc.master.name}-vm"
