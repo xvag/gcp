@@ -56,8 +56,8 @@ resource "google_compute_instance" "master-vm" {
   }
 
   network_interface {
-    network    = google_compute_network.[var.vpc.master.value.name].name
-    subnetwork = google_compute_subnetwork.[var.vpc.master.value.name].name
+    network    = "${var.vpc.master.value.name}-vpc"
+    subnetwork = "${var.vpc.master.value.name}-subnet"
     network_ip = var.vpc.master.value.ip
     access_config {
     }
@@ -80,8 +80,8 @@ resource "google_compute_instance" "worker-vm" {
   }
 
   network_interface {
-    network    = google_compute_network.[var.vpc.worker.value.name].name
-    subnetwork = google_compute_subnetwork.[var.vpc.worker.value.name].name
+    network    = "${var.vpc.worker.value.name}-vpc"
+    subnetwork = "${var.vpc.worker.value.name}-subnet"
     network_ip = var.vpc.worker.value.ip[count.index]
     access_config {
     }
@@ -102,8 +102,8 @@ resource "google_compute_instance" "control-vm" {
   }
 
   network_interface {
-    network    = google_compute_network.[var.vpc.control.value.name].name
-    subnetwork = google_compute_subnetwork.[var.vpc.control.value.name].name
+    network    = "${var.vpc.control.value.name}-vpc"
+    subnetwork = "${var.vpc.control.value.name}-subnet"
     network_ip = var.vpc.control.value.ip
     access_config {
     }
