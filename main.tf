@@ -21,7 +21,7 @@ resource "google_compute_network" "vpc" {
 resource "google_compute_subnetwork" "subnet" {
   for_each      = toset(var.vpc)
   name          = "${each.value}-subnet"
-  region        = var.[each.value].region
+  region        = var.${each.value}.region
   ip_cidr_range = var.[each.value].subnet
   network       = google_compute_network.[each.value]-vpc.id
 }
