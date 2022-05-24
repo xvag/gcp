@@ -146,7 +146,7 @@ resource "google_compute_instance" "worker-vm" {
   network_interface {
     network    = google_compute_network.worker-vpc.name
     subnetwork = google_compute_subnetwork.worker-subnet.name
-    network_ip = var.worker.ip[${count.index}]
+    network_ip = var.worker.ip[count.index]
     access_config {
     }
   }
