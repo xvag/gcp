@@ -42,25 +42,69 @@ resource "google_compute_firewall" "fw" {
   ]
 }
 
-resource "google_compute_instance" "vm" {
-  for_each = var.vpc
-  count = length(each.value.ip)
-  name         = "${each.value.name}-vm-${count.index}"
-  machine_type = each.value.machine
-  zone         = each.value.zone
+resource "google_compute_instance" "master-vm" {
+  name         = "${var.vpc.master.name}-vm"
+  machine_type = var.vpc.master.machine
+  zone         = var.vpc.master.zone
   allow_stopping_for_update = true
 
   boot_disk {
     initialize_params {
-      image = each.value.image
-      size  = each.value.size
+      image = var.vpc.master.image
+      size  = var.vpc.master.size
     }
   }
 
   network_interface {
-    network    = "${each.value.name}-vpc"
-    subnetwork = "${each.value.name}-subnet"
-    network_ip = each.value.ip[count.index]
+    network    = "${var.vpc.master.name}-vpc"
+    subnetwork = "${var.vpc.master.name}-subnet"
+    network_ip = var.vpc.master.ip[0]
+    access_config {
+    }
+  }
+}
+
+resource "google_compute_instance" "worker-vm" {
+  count = 2
+
+  name         = "${var.vpc.worker.name}-vm-${count.index}"
+  machine_type = var.vpc.worker.machine
+  zone         = var.vpc.worker.zone
+  allow_stopping_for_update = true
+
+  boot_disk {
+    initialize_params {
+      image = var.vpc.worker.image
+      size  = var.vpc.worker.size
+    }
+  }
+
+  network_interface {
+    network    = "${var.vpc.worker.name}-vpc"
+    subnetwork = "${var.vpc.worker.name}-subnet"
+    network_ip = var.vpc.worker.ip[count.index]
+    access_config {
+    }
+  }
+}
+
+resource "google_compute_instance" "control-vm" {
+  name         = "${var.vpc.control.name}-vm"
+  machine_type = var.vpc.control.machine
+  zone         = var.vpc.control.zone
+  allow_stopping_for_update = true
+
+  boot_disk {
+    initialize_params {
+      image = var.vpc.control.image
+      size  = var.vpc.control.size
+    }
+  }
+
+  network_interface {
+    network    = "${var.vpc.control.name}-vpc"
+    subnetwork = "${var.vpc.control.name}-subnet"
+    network_ip = var.vpc.control.ip[0]
     access_config {
     }
   }
