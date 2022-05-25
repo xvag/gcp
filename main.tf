@@ -138,6 +138,10 @@ resource "google_compute_instance" "master-vm" {
     access_config {
     }
   }
+
+  metadata = {
+    ssh-keys = "${var.ssh_user}:${file(var.ssh_key)}"
+  }
 }
 
 resource "google_compute_instance" "worker-vm" {
@@ -161,6 +165,10 @@ resource "google_compute_instance" "worker-vm" {
     network_ip = var.vpc.worker.ip[count.index]
     access_config {
     }
+  }
+
+  metadata = {
+    ssh-keys = "${var.ssh_user}:${file(var.ssh_key)}"
   }
 }
 

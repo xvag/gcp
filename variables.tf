@@ -8,6 +8,16 @@ variable "gcp_creds" {
   description = "Google Cloud service account credentials"
 }
 
+variable "ssh_user" {
+  type      = string
+  sensitive = true
+}
+
+variable "ssh_key" {
+  type      = string
+  sensitive = true
+}
+
 variable "vpc" {
   type      = map(object({
     name    = string
