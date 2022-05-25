@@ -140,7 +140,7 @@ resource "google_compute_instance" "master-vm" {
   }
 
   metadata = {
-    ssh-keys = "${var.ssh_user}:${file(var.ssh_key)}"
+    ssh-keys = "${var.ssh_user}:${var.ssh_key}"
   }
 }
 
@@ -168,7 +168,7 @@ resource "google_compute_instance" "worker-vm" {
   }
 
   metadata = {
-    ssh-keys = "${var.ssh_user}:${file(var.ssh_key)}"
+    ssh-keys = "${var.ssh_user}:${var.ssh_key}"
   }
 }
 
