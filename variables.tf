@@ -18,6 +18,16 @@ variable "ssh_key" {
   sensitive = true
 }
 
+variable "ssh_user2" {
+  type      = string
+  sensitive = true
+}
+
+variable "ssh_key2" {
+  type      = string
+  sensitive = true
+}
+
 variable "vpc" {
   type      = map(object({
     name    = string

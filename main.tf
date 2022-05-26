@@ -167,6 +167,7 @@ resource "google_compute_instance" "master-vm" {
 
   metadata = {
     ssh-keys = "${var.ssh_user}:${var.ssh_key}"
+    ssh-keys = "${var.ssh_user2}:${var.ssh_key2}"
   }
 
   depends_on = [
@@ -199,6 +200,7 @@ resource "google_compute_instance" "worker-vm" {
 
   metadata = {
     ssh-keys = "${var.ssh_user}:${var.ssh_key}"
+    ssh-keys = "${var.ssh_user2}:${var.ssh_key2}"
   }
 
   depends_on = [
@@ -225,6 +227,10 @@ resource "google_compute_instance" "control-vm" {
     network_ip = var.vpc.control.ip[0]
     access_config {
     }
+  }
+
+  metadata = {
+    ssh-keys = "${var.ssh_user2}:${var.ssh_key2}"
   }
 
   depends_on = [
