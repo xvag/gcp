@@ -63,6 +63,9 @@ resource "google_compute_firewall" "master-fw" {
   source_ranges = [
     "0.0.0.0/0"
   ]
+  depends_on = [
+    google_compute_subnetwork.master-subnet
+  ]
 }
 
 resource "google_compute_firewall" "worker-fw" {
@@ -78,6 +81,9 @@ resource "google_compute_firewall" "worker-fw" {
   source_ranges = [
     "0.0.0.0/0"
   ]
+  depends_on = [
+    google_compute_subnetwork.worker-subnet
+  ]
 }
 
 resource "google_compute_firewall" "control-fw" {
@@ -92,6 +98,9 @@ resource "google_compute_firewall" "control-fw" {
   }
   source_ranges = [
     "0.0.0.0/0"
+  ]
+  depends_on = [
+    google_compute_subnetwork.control-subnet
   ]
 }
 
@@ -159,6 +168,10 @@ resource "google_compute_instance" "master-vm" {
   metadata = {
     ssh-keys = "${var.ssh_user}:${var.ssh_key}"
   }
+
+  depends_on = [
+    google_compute_subnetwork.master-subnet
+  ]
 }
 
 resource "google_compute_instance" "worker-vm" {
@@ -187,6 +200,10 @@ resource "google_compute_instance" "worker-vm" {
   metadata = {
     ssh-keys = "${var.ssh_user}:${var.ssh_key}"
   }
+
+  depends_on = [
+    google_compute_subnetwork.worker-subnet
+  ]
 }
 
 resource "google_compute_instance" "control-vm" {
@@ -209,4 +226,8 @@ resource "google_compute_instance" "control-vm" {
     access_config {
     }
   }
+
+  depends_on = [
+    google_compute_subnetwork.control-subnet
+  ]
 }
