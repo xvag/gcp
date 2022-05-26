@@ -13,11 +13,6 @@ provider "google" {
 }
 
 ### Create the VPC networks
-# resource "google_compute_network" "vpc" {
-#    for_each = var.vpc
-#    name     = "${each.value.name}-vpc"
-#    auto_create_subnetworks = "false"
-# }
 
 resource "google_compute_network" "master-vpc" {
   name = "master-vpc"
@@ -33,13 +28,6 @@ resource "google_compute_network" "control-vpc" {
 }
 
 ### Create the subnetworks
-# resource "google_compute_subnetwork" "subnet" {
-#   for_each      = var.vpc
-#   name          = "${each.value.name}-subnet"
-#   region        = each.value.region
-#   ip_cidr_range = each.value.subnet
-#   network       = "${each.value.name}-vpc"
-# }
 
 resource "google_compute_subnetwork" "master-subnet" {
   name          = "master-subnet"
@@ -62,10 +50,39 @@ resource "google_compute_subnetwork" "control-subnet" {
 
 ### Create the firewall rules
 
-resource "google_compute_firewall" "fw" {
-  for_each = var.vpc
-  name     = "${each.value.name}-fw"
-  network  = "${each.value.name}-vpc"
+resource "google_compute_firewall" "master-fw" {
+  name     = "master-fw"
+  network  = "master-vpc"
+  allow {
+    protocol = "icmp"
+  }
+  allow {
+    protocol = "tcp"
+    ports    = ["0-65535"]
+  }
+  source_ranges = [
+    "0.0.0.0/0"
+  ]
+}
+
+resource "google_compute_firewall" "worker-fw" {
+  name     = "worker-fw"
+  network  = "worker-vpc"
+  allow {
+    protocol = "icmp"
+  }
+  allow {
+    protocol = "tcp"
+    ports    = ["0-65535"]
+  }
+  source_ranges = [
+    "0.0.0.0/0"
+  ]
+}
+
+resource "google_compute_firewall" "control-fw" {
+  name     = "control-fw"
+  network  = "control-vpc"
   allow {
     protocol = "icmp"
   }
@@ -119,7 +136,7 @@ resource "google_compute_network_peering" "worker-control" {
 ### Create the VMs
 
 resource "google_compute_instance" "master-vm" {
-  name         = "${var.vpc.master.name}-vm"
+  name         = "master-vm"
   machine_type = var.vpc.master.machine
   zone         = var.vpc.master.zone
   allow_stopping_for_update = true
@@ -132,8 +149,8 @@ resource "google_compute_instance" "master-vm" {
   }
 
   network_interface {
-    network    = "${var.vpc.master.name}-vpc"
-    subnetwork = "${var.vpc.master.name}-subnet"
+    network    = "master-vpc"
+    subnetwork = "master-subnet"
     network_ip = var.vpc.master.ip[0]
     access_config {
     }
@@ -147,7 +164,7 @@ resource "google_compute_instance" "master-vm" {
 resource "google_compute_instance" "worker-vm" {
   count = 2
 
-  name         = "${var.vpc.worker.name}-vm-${count.index}"
+  name         = "worker-vm-${count.index}"
   machine_type = var.vpc.worker.machine
   zone         = var.vpc.worker.zone
   allow_stopping_for_update = true
@@ -160,8 +177,8 @@ resource "google_compute_instance" "worker-vm" {
   }
 
   network_interface {
-    network    = "${var.vpc.worker.name}-vpc"
-    subnetwork = "${var.vpc.worker.name}-subnet"
+    network    = "worker-vpc"
+    subnetwork = "worker-subnet"
     network_ip = var.vpc.worker.ip[count.index]
     access_config {
     }
@@ -173,7 +190,7 @@ resource "google_compute_instance" "worker-vm" {
 }
 
 resource "google_compute_instance" "control-vm" {
-  name         = "${var.vpc.control.name}-vm"
+  name         = "control-vm"
   machine_type = var.vpc.control.machine
   zone         = var.vpc.control.zone
   allow_stopping_for_update = true
@@ -186,8 +203,8 @@ resource "google_compute_instance" "control-vm" {
   }
 
   network_interface {
-    network    = "${var.vpc.control.name}-vpc"
-    subnetwork = "${var.vpc.control.name}-subnet"
+    network    = "control-vpc"
+    subnetwork = "control-subnet"
     network_ip = var.vpc.control.ip[0]
     access_config {
     }
