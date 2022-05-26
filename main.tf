@@ -198,7 +198,7 @@ resource "google_compute_instance" "worker-vm" {
   }
 
   metadata = {
-    ssh-keys = ["${var.ssh_user}:${var.ssh_key}, \n${var.ssh_user2}:${var.ssh_key2}"]
+    ssh-keys = ["${var.ssh_user}:${var.ssh_key} \n${var.ssh_user2}:${var.ssh_key2}"]
   }
 
   depends_on = [
