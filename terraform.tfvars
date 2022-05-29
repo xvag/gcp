@@ -7,7 +7,7 @@ vpc = {
     zone    = "europe-west1-b"
     subnet  = "10.1.0.0/24"
     machine = "custom-4-8192"
-    image   = "debian-cloud/debian-10"
+    image   = "centos-cloud/centos-7"
     size    = "20"
     ip      = ["10.1.0.10"]
   },
@@ -17,7 +17,7 @@ vpc = {
     zone    = "europe-central2-a"
     subnet  = "10.2.0.0/24"
     machine = "custom-2-8192"
-    image   = "debian-cloud/debian-10"
+    image   = "centos-cloud/centos-7"
     size    = "20"
     ip      = ["10.2.0.11","10.2.0.12"]
   },
