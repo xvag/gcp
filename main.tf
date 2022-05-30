@@ -54,11 +54,7 @@ resource "google_compute_firewall" "master-fw" {
   name     = "master-fw"
   network  = "master-vpc"
   allow {
-    protocol = "icmp"
-  }
-  allow {
-    protocol = "tcp"
-    ports    = ["0-65535"]
+    protocol = "all"
   }
   source_ranges = [
     "0.0.0.0/0"
@@ -72,11 +68,7 @@ resource "google_compute_firewall" "worker-fw" {
   name     = "worker-fw"
   network  = "worker-vpc"
   allow {
-    protocol = "icmp"
-  }
-  allow {
-    protocol = "tcp"
-    ports    = ["0-65535"]
+    protocol = "all"
   }
   source_ranges = [
     "0.0.0.0/0"
@@ -90,11 +82,7 @@ resource "google_compute_firewall" "control-fw" {
   name     = "control-fw"
   network  = "control-vpc"
   allow {
-    protocol = "icmp"
-  }
-  allow {
-    protocol = "tcp"
-    ports    = ["0-65535"]
+    protocol = "all"
   }
   source_ranges = [
     "0.0.0.0/0"
