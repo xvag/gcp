@@ -1,0 +1,17 @@
+[servers]
+control
+master
+worker1
+worker2
+
+[k8s]
+master
+worker1
+worker2
+
+[masters]
+master
+
+[workers]
+worker1
+worker2
