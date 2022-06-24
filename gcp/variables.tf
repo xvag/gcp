@@ -52,3 +52,7 @@ variable "fw" {
       ports     = list(string)
     })))
 }
+
+variable "target_pool" {
+  type = list(string)
+}
