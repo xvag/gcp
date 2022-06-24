@@ -22,7 +22,7 @@ vpc = {
 fw = {
   controller_vpc = {
     "tcp" = {
-      ports    = []
+      ports    = ["*"]
     }
     "icmp" = {
       ports    = []
@@ -30,7 +30,7 @@ fw = {
   },
   worker_vpc = {
     "tcp" = {
-      ports    = []
+      ports    = [*]
     }
     "icmp" = {
       ports    = []
