@@ -1,4 +1,13 @@
 ###
+### Public IP
+###
+
+resource "google_compute_address" "kubernetes-api-ip" {
+  name   = "kubernetes-api-ip"
+  region = var.vpc.controller.region
+}
+
+###
 ### VPC/Subnets
 ###
 
