@@ -50,7 +50,7 @@ vm = {
     machine = "e2-standard-2"
     image   = "centos-cloud/centos-7"
     size    = "200"
-    ip      = ["10.240.0.10","10.240.0.11"]
+    ip      = ["10.240.0.10","10.240.0.11","10.240.0.12"]
     tags    = ["k8s", "controller"]
     scopes  = ["compute-rw","storage-ro","service-management","service-control","logging-write","monitoring"]
   },
@@ -60,7 +60,7 @@ vm = {
     machine = "e2-standard-2"
     image   = "centos-cloud/centos-7"
     size    = "200"
-    ip      = ["10.250.0.20","10.250.0.21"]
+    ip      = ["10.250.0.20","10.250.0.21","10.250.0.22"]
     tags    = ["k8s", "worker"]
     scopes  = ["compute-rw","storage-ro","service-management","service-control","logging-write","monitoring"]
   }
