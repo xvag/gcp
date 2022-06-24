@@ -48,7 +48,7 @@ vm = {
     name    = "controller"
     zone    = "europe-west4-a"
     machine = "e2-standard-2"
-    image   = "centos-cloud/centos-7"
+    image   = "ubuntu-os-cloud/ubuntu-2004-lts"
     size    = "200"
     ip      = ["10.240.0.10","10.240.0.11","10.240.0.12"]
     tags    = ["k8s", "controller"]
@@ -58,16 +58,10 @@ vm = {
     name    = "worker"
     zone    = "us-central1-c"
     machine = "e2-standard-2"
-    image   = "centos-cloud/centos-7"
+    image   = "ubuntu-os-cloud/ubuntu-2004-lts"
     size    = "200"
     ip      = ["10.250.0.20","10.250.0.21","10.250.0.22"]
     tags    = ["k8s", "worker"]
     scopes  = ["compute-rw","storage-ro","service-management","service-control","logging-write","monitoring"]
   }
 }
-
-target_pool     = [
-                    "europe-west4-a/controller-0",
-                    "europe-west4-a/controller-1",
-                    "europe-west4-a/controller-2",
-                  ]
