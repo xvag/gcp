@@ -1,5 +1,11 @@
-variable "project" {
-  type = string
+###
+### Variable Declarations
+###
+
+variable "gcp_project" {
+  type      = string
+  sensitive = true
+  description = "Google Cloud project ID"
 }
 
 variable "gcp_creds" {
@@ -9,34 +15,40 @@ variable "gcp_creds" {
 }
 
 variable "ssh_user" {
-  type      = string
-  sensitive = true
+  type        = string
+  sensitive   = true
+  description = "SSH username for connecting to VMs"
 }
 
 variable "ssh_key" {
-  type      = string
-  sensitive = true
-}
-
-variable "ssh_user2" {
-  type      = string
-  sensitive = true
-}
-
-variable "ssh_key2" {
-  type      = string
-  sensitive = true
+  type        = string
+  sensitive   = true
+  description = "SSH .pub key for connecting to VMs"
 }
 
 variable "vpc" {
+  type       = map(object({
+    name     = string
+    region   = string
+    cidr     = string
+  }))
+}
+
+variable "vm" {
   type      = map(object({
     name    = string
-    region  = string
     zone    = string
-    subnet  = string
     machine = string
     image   = string
     size    = string
     ip      = list(string)
+    tags    = list(string)
+    scopes  = list(string)
   }))
+}
+
+variable "fw" {
+    type        = map(map(object({
+      ports     = list(string)
+    })))
 }

@@ -1,3 +1,3 @@
 # Deploy K8s Infra & Cluster
 
-Deploy infrastructure and kubernetes cluster "as code", with Terraform and Ansible.
+Deploy infrastructure and Kubernetes Cluster as code, with Terraform and Ansible.
