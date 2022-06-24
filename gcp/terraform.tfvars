@@ -30,7 +30,7 @@ fw = {
   },
   worker_vpc = {
     "tcp" = {
-      ports    = [*]
+      ports    = []
     }
     "icmp" = {
       ports    = []
